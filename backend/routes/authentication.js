@@ -13,7 +13,7 @@ authenticationRouter.route('/login').post(async (req,res)=>{
                 f=true;
                 if(await bCrypt.compare(req.body.password,user.password))
                 res.status(200).json({
-                    'token':jwt.sign({'id':user._id},process.env.ACCESS_SECRET_KEY)
+                    'token':jwt.sign({'userID':user._id},process.env.ACCESS_SECRET_KEY)
                 });
             }
         });
