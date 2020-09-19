@@ -20,10 +20,18 @@ bugRouter.route('/:id').get((req,res)=>{
     Bug.findById(req.params.id).then((bug)=>{
         res.status(200).json({'title': bug.title,'description':bug.description,'isFixed':bug.isFixed,'reportedBy':bug.reportedBy});
     }).catch((e)=>{
+        console.log(e);
         res.status(500).json({
             error:e.toString()
         });
+
     });
+});
+bugRouter.route('/').get((req,res)=>{
+    console.log('lol');
+    Bug.find()
+    .then(bugs=>res.json(bugs))
+    .catch(err=>res.status(400).json('Error: '+err));
 });
 bugRouter.route('/fixed').post((req,res)=>{
     // jwt.verify(req.header('authorization').split(' ')[1];
