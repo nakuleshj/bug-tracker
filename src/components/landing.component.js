@@ -1,13 +1,18 @@
 import React,{Component} from 'react';
 import Navbar from './navbar.component';
 import axios from 'axios';
-import $ from 'jquery';
 import Modal from 'react-bootstrap/Modal';
 export default class Landing extends Component{
     constructor(props){
         super(props);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onDescriptionChanged=this.onDescriptionChanged.bind(this);
+        this.onTitleChanged=this.onTitleChanged.bind(this);
         this.state={
-            issues:[]
+            issues:[],
+            title:'',
+            isOpen:false,
+            desc:''
         }
     }
     componentDidMount(){
@@ -22,6 +27,29 @@ export default class Landing extends Component{
         );
         
 
+    }
+    onSubmit(e){
+        e.preventDefault();
+        
+        const newIssue={
+            title:this.state.title,
+            description:this.state.desc
+        };
+        console.log(newIssue);
+        this.setState({
+            isOpen:false
+        });
+        window.location='/login';
+    }
+    onTitleChanged(e){
+        this.setState({
+            title: e.target.value
+          });
+    }
+    onDescriptionChanged(e){
+        this.setState({
+            desc: e.target.value
+          });
     }
     render(){
 
@@ -40,29 +68,29 @@ export default class Landing extends Component{
             <div className='container-fluid'>
             <Navbar />
       <Modal show={this.state.isOpen} onHide={hideModal}>
-      <form>
+      <form onSubmit={this.onSubmit} method='post'>
         <Modal.Header>
           <Modal.Title>Report an Issue</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             
-            <label for='titleInput' style={{marginBottom:'-1px'}}>Title:</label>
-            <input className='form-control mb-1 mt-0' type='text' width='100%' id='titleInput'/>
-            <label for='descriptionInput' style={{marginBottom:'-1px'}}>Description:</label>
-            <input  className='form-control' id='descriptionInput' type='text'/>
+            <label for='titleInput' style={{marginBottom:'-1px'}} ><b>Title:</b></label>
+            <input className='form-control mb-1 mt-0' type='text' onChange={this.onTitleChanged} width='100%' id='titleInput' required/>
+            <label for='descriptionInput' style={{marginBottom:'-1px'}} ><b>Description:</b></label>
+            <input  className='form-control' id='descriptionInput' type='text' onChange={this.onDescriptionChanged} required/>
             
         </Modal.Body>
         <Modal.Footer>
-          <button className='btn btn-secondary' onClick={hideModal}>Cancel</button>
-          <button type='submit' className='btn btn-primary' style={{backgroundColor:'#434DB5', border:'1px solid #434DB5'}}>Submit</button>
+          <button type="button" className='btn btn-secondary' onClick={hideModal}>Cancel</button>
+          <button type='submit' className='btn btn-primary' style={{backgroundColor:'#5B68F7', border:'1px solid #5B68F7'}}>Submit</button>
         </Modal.Footer>
         </form>
       </Modal>
             <div className='row'>
             <div className='col-sm-8 ml-auto mr-auto'>
-                <div className='row'>
-                <h1 className='mr-auto'>Issues</h1>
-                <h1><i className="fa fa-plus my-auto" style={{color:'#434DB5',cursor:'pointer'}} onClick={showModal} ></i></h1></div>
+                <div className='row px-3'>
+                <h1 className='mr-auto'><b>Issues</b></h1>
+                <h1><i className="fa fa-plus my-auto" style={{color:'#5B68F7',cursor:'pointer'}} onClick={showModal} ></i></h1></div>
             </div>
             </div>
                 <div className='row table-responsive'>
@@ -81,7 +109,7 @@ export default class Landing extends Component{
   <tbody>
       {
           this.state.issues.map((issue)=>{
-            return <tr>
+            return <tr key={issue._id}>
       <td className='text-center'>{issue.title}</td>
       <td className='text-center'>{issue.description}</td>
       <td className='text-center'>Nakulesh</td>

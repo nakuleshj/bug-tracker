@@ -1,17 +1,16 @@
 import React from 'react';
-import './App.css';
 import {BrowserRouter as Router,Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import $ from 'jquery';
+
 import Landing from './components/landing.component';
+import LoginPage from './components/login.component'
 function App() {
   return (
     <Router>
     
     <Route path='/' exact component={()=>{
-      
-      return false?<Landing name='Nakulesh'/>:<Landing name='Nakul'/>;}}/>
-    {/* <Route path='/bug/create' exact component={}/> */}
+      return <Landing/>;}}/>
+    <Route path='/login' exact component={LoginPage}/>
     </Router>
   );
 }

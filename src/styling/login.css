@@ -1,0 +1,46 @@
+.login-container{
+    background-image:linear-gradient(to right, black , #5B68F7 );
+    height:100vh;
+}
+.login-panel{
+    background-color: white;
+    padding: 20;
+    box-shadow: 8px 10px ;
+    width: 330px;
+    border-radius: 10px;
+}
+input[type='email']{
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    z-index: 3;
+}
+input[type='password']{
+    border-radius: 0px;
+}
+
+.auth-submit-buttom{
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
+}
+.reg-button{
+    border:1px solid #5B68F7;
+    color: #5B68F7;
+}
+.reg-button:hover{
+    border:1px solid #5B68F7;
+    background-color: #5B68F7;
+}
+.bugtracker-brand-login{
+    color:#5B68F7;
+  }
+@media screen and (max-width:350px){
+    .login-panel{
+        width:inherit;
+        padding: 5;
+    }
+    .bugtracker-brand-login{
+        display: none;
+        color:#5B68F7;
+      }
+}

@@ -28,9 +28,11 @@ authenticationRouter.route('/login').post(async (req,res)=>{
 authenticationRouter.route('/register').post(async (req,res)=>{
     try{
         const email=req.body.email;
+        const name=req.body.name;
         const hashedPassword=await bCrypt.hash(req.body.password,10);
         const newUser=new User({
             email:email,
+            name:name,
             password:hashedPassword
         });
         newUser.save().then((doc)=>res.status(201).json({'status':'User Registered'+doc._id}))
