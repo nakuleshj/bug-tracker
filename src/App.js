@@ -3,7 +3,8 @@ import {BrowserRouter as Router,Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Landing from './components/landing.component';
-import LoginPage from './components/login.component'
+import LoginPage from './components/login.component';
+import ProtectedRoute from './components/protectedRoute.component';
 function App() {
   return (
     <Router>

@@ -32,7 +32,8 @@ export default class LoginPage extends Component{
             // this.setState({
             //     isModalOpen:false
             // });
-            console.log(res.data.token);
+            localStorage.setItem('token',res.data.token)
+            localStorage.getItem('token')?console.log('true'):console.log('false');
         }).catch((e)=>{
             // this.setState({
             //     isModalOpen:false
@@ -125,7 +126,7 @@ export default class LoginPage extends Component{
                                     this.setState({
                                         isModalOpen:true
                                     });
-                                }}>Create Account</button>
+                                }}>CREATE ACCOUNT</button>
                             </div>
                     </div>
                 </div>

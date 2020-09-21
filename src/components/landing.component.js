@@ -36,15 +36,33 @@ export default class Landing extends Component{
             description:this.state.desc
         };
         console.log(newIssue);
-        this.setState({
-            isOpen:false
+        
+        axios.post('/bug/add',{
+            ...newIssue
+        },{
+            headers: {
+                'authorization': `Basic ${localStorage.getItem('token')}` 
+              }
+        }).then((res)=>{
+            console.log(res.data.status);
+            this.setState({
+                isOpen:false
+            });
+        }).catch((e)=>{
+            this.setState({
+                isOpen:false
+            });
         });
-        window.location='/login';
+        window.location.reload();
     }
     onTitleChanged(e){
         this.setState({
             title: e.target.value
           });
+    }
+    handleIssueFix(bugID){
+        axios.post('/bug/fix',{bugID:bugID}).then((res)=>console.log(res.data.status)).catch((e)=>console.log(e.toString()));
+        window.location.reload();
     }
     onDescriptionChanged(e){
         this.setState({
@@ -113,7 +131,7 @@ export default class Landing extends Component{
       <td className='text-center'>{issue.title}</td>
       <td className='text-center'>{issue.description}</td>
       <td className='text-center'>Nakulesh</td>
-      <td className='text-center'><h3><i className={issue.isFixed?'fa fa-check':'fa fa-times'} style={{color:issue.isFixed?'green':'red'}}></i></h3></td>
+      <td className='text-center'><h3><i className={issue.isFixed?'fa fa-check':'fa fa-times'} style={{color:issue.isFixed?'green':'red',cursor:issue.isFixed?'default':'pointer'}} onClick={()=>this.handleIssueFix(issue._id)}></i></h3></td>
       </tr>;
           })
           }

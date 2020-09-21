@@ -2,7 +2,7 @@ const bugRouter=require('express').Router();
 const jwt=require('jsonwebtoken');
 let Bug=require('../models/bug.model');
 
-bugRouter.route('/report').post((req,res)=>{
+bugRouter.route('/add').post((req,res)=>{
     const title=req.body.title;
     const description=req.body.description;
     const reportedBy=jwt.verify(req.header('authorization').split(' ')[1],process.env.ACCESS_SECRET_KEY).userID;
@@ -33,7 +33,7 @@ bugRouter.route('/').get((req,res)=>{
     .then(bugs=>res.json(bugs))
     .catch(err=>res.status(400).json('Error: '+err));
 });
-bugRouter.route('/fixed').post((req,res)=>{
+bugRouter.route('/fix').post((req,res)=>{
     // jwt.verify(req.header('authorization').split(' ')[1];
     Bug.findByIdAndUpdate(req.body.bugID,{
         isFixed:true
