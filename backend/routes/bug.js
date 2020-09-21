@@ -29,8 +29,10 @@ bugRouter.route('/:id').get((req,res)=>{
 });
 bugRouter.route('/').get((req,res)=>{
     console.log('lol');
-    Bug.find()
-    .then(bugs=>res.json(bugs))
+    const reportedBy=jwt.verify(req.header('authorization').split(' ')[1],process.env.ACCESS_SECRET_KEY).userID;
+    Bug.find({reportedBy:reportedBy}).populate('reportedBy')
+    .then(bugs=>{
+        res.json(bugs)})
     .catch(err=>res.status(400).json('Error: '+err));
 });
 bugRouter.route('/fix').post((req,res)=>{

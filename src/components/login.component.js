@@ -13,6 +13,7 @@ export default class LoginPage extends Component{
             loginPassword:'',
             registerName:'',
             registerEmail:'',
+            isLoading:false,
             registerPassword:''
         };
         this.onLoginSubmit = this.onLoginSubmit.bind(this);
@@ -28,12 +29,16 @@ export default class LoginPage extends Component{
         //     headers: {'authorization': 'Bearer csdscdscscdsc'}
         //   };
         e.preventDefault();
+        this.setState({
+            isLoading:true
+        });
         axios.post('/authenticate/login',{email:this.state.loginEmail,password:this.state.loginPassword}).then((res)=>{
             // this.setState({
             //     isModalOpen:false
             // });
-            localStorage.setItem('token',res.data.token)
-            localStorage.getItem('token')?console.log('true'):console.log('false');
+            localStorage.setItem('token',res.data.token);
+            // localStorage.getItem('token')?console.log('true'):console.log('false');
+            window.location='/';
         }).catch((e)=>{
             // this.setState({
             //     isModalOpen:false
@@ -107,18 +112,20 @@ export default class LoginPage extends Component{
         </form>
                 </Modal>
                 <div className='row h-100'>
-                    {/* <div className='col'>
-                        <img src='../../icon.png' alt='bugtrackr icon' className='img-fluid mx-auto mt-5 d-block'/>
-                        <h1 className='text-center text-brand mt-3 mx-auto d-block'>BugTracker</h1>
-                    </div> */}
                     <div className='col my-auto'>
                         <div className='login-panel mx-auto px-3 py-4 d-block text-center'>
                         <img src='../../icon.png' alt='bugtrackr icon' className='img-fluid mb-3' style={{height:'100px'}}/>
                             <h1 className='mb-4  bugtracker-brand-login'><strong>BugTracker</strong></h1>
-                            <form onSubmit={this.onLoginSubmit}>
-                            <input type='email' className='form-control' placeholder='Email Address' id='emailInput' onChange={this.onLoginEmailChanged}/>
-                            <input type='password' className='form-control' placeholder='Password' id='pwdInput' onChange={this.onLoginPasswordChanged}/>
-                            <button type='submit' className='btn btn-primary btn-block  mx-0 auth-submit-buttom' style={{backgroundColor:'#5B68F7', border:'1px solid #5B68F7'}}>LOGIN</button>
+                            <form onSubmit={!this.state.isLoading?this.onLoginSubmit:(e)=>e.preventDefault()}>
+                            <input type='email' className='form-control' placeholder='Email Address' id='emailInput' onChange={this.onLoginEmailChanged} required/>
+                            <input type='password' className='form-control' placeholder='Password' id='pwdInput' onChange={this.onLoginPasswordChanged} required/>
+                            <button type='submit' className='btn btn-primary btn-block  mx-0 auth-submit-buttom' style={{backgroundColor:'#5B68F7', border:'1px solid #5B68F7'}}>
+                            {this.state.isLoading?<div class="spinner mx-auto">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                              </div>:
+                                'LOGIN'}</button>
                             </form>
                             
                                 

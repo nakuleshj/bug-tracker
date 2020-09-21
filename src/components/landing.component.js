@@ -16,7 +16,12 @@ export default class Landing extends Component{
         }
     }
     componentDidMount(){
-        axios.get('http://localhost:5000/bug').then(
+        console.log(localStorage.getItem('token'));
+        axios.get('/bug',{
+            headers: {
+                'authorization': `Basic ${localStorage.getItem('token')}` 
+              }
+        }).then(
             response => {
                 if (response.data.length > 0) {
                   this.setState({
@@ -130,7 +135,7 @@ export default class Landing extends Component{
             return <tr key={issue._id}>
       <td className='text-center'>{issue.title}</td>
       <td className='text-center'>{issue.description}</td>
-      <td className='text-center'>Nakulesh</td>
+      <td className='text-center'>{issue.reportedBy.name}</td>
       <td className='text-center'><h3><i className={issue.isFixed?'fa fa-check':'fa fa-times'} style={{color:issue.isFixed?'green':'red',cursor:issue.isFixed?'default':'pointer'}} onClick={()=>this.handleIssueFix(issue._id)}></i></h3></td>
       </tr>;
           })

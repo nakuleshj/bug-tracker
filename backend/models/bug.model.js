@@ -16,7 +16,8 @@ const bugSchema=new Schema({
     reportedBy:{
         type:String,
         required:true,
-        trim:true
+        trim:true,
+        ref:'users'
     }
 },{
     writeConcern: {
