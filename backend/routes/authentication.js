@@ -2,7 +2,6 @@ const authenticationRouter=require('express').Router();
 const jwt=require('jsonwebtoken');
 const bCrypt=require('bcrypt');
 let User=require('../models/users.model');
-//Secret key generated with require('crypto').randomBytes(64).toString('hex')
 authenticationRouter.route('/login').post(async (req,res)=>{
     try{
         let f=false;
@@ -13,7 +12,8 @@ authenticationRouter.route('/login').post(async (req,res)=>{
                 f=true;
                 if(await bCrypt.compare(req.body.password,user.password))
                 res.status(200).json({
-                    'token':jwt.sign({'userID':user._id},process.env.ACCESS_SECRET_KEY)
+                    'token':jwt.sign({'userID':user._id},process.env.ACCESS_SECRET_KEY),
+                    'role':user.userRole
                 });
             }
         });
@@ -25,17 +25,26 @@ authenticationRouter.route('/login').post(async (req,res)=>{
         });
     }
 });
+authenticationRouter.route('/').get((req,res)=>{
+    User.find().then(users=>res.json(users)).catch(e=>res.status(500))
+});
+authenticationRouter.route('/:id').delete((req,res)=>{
+    User.findByIdAndDelete(req.params.id).then(()=>res.status(200).json('User Deleted'))
+    .catch((e)=>res.status(500).json({'error':e.toString()}));
+});
 authenticationRouter.route('/register').post(async (req,res)=>{
     try{
         const email=req.body.email;
         const name=req.body.name;
+        const userRole=req.body.userRole;
         const hashedPassword=await bCrypt.hash(req.body.password,10);
         const newUser=new User({
             email:email,
             name:name,
-            password:hashedPassword
+            password:hashedPassword,
+            userRole:req.body.userRole
         });
-        newUser.save().then((doc)=>res.status(201).json({'status':'User Registered'+doc._id}))
+        newUser.save().then((user)=>res.status(201).json({'token':jwt.sign({'userID':user._id},process.env.ACCESS_SECRET_KEY),role:req.body.userRole}))
         .catch(err=>res.status(500).json('Error: '+err));
     }catch(e){
         console.log(e);

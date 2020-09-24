@@ -1,8 +1,9 @@
 const mongoose=require('mongoose');
+const { type } = require('jquery');
 const Schema=mongoose.Schema;
-const teamSchema=new Schema(
+const projectSchema=new Schema(
     {
-        teamName:{
+        projectName:{
             type:String,
             required:true
         },
@@ -12,6 +13,12 @@ const teamSchema=new Schema(
         createdBy:{
             type:String,
             required:true
+        },
+        manager:{
+            type:String,
+            required:true,
+            trim:true,
+            ref:'users'
         }
     },{
         writeConcern: {
@@ -22,5 +29,5 @@ const teamSchema=new Schema(
     }
 );
 
-const teamModel=mongoose.model('teams',teamSchema);
-module.exports=teamModel
+const projectModel=mongoose.model('projects',projectSchema);
+module.exports=projectModel

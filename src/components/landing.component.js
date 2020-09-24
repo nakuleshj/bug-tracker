@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import Navbar from './navbar.component';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
+import '../styling/landing.css';
 export default class Landing extends Component{
     constructor(props){
         super(props);
@@ -16,7 +17,6 @@ export default class Landing extends Component{
         }
     }
     componentDidMount(){
-        console.log(localStorage.getItem('token'));
         axios.get('/bug',{
             headers: {
                 'authorization': `Basic ${localStorage.getItem('token')}` 
@@ -111,20 +111,21 @@ export default class Landing extends Component{
       </Modal>
             <div className='row'>
             <div className='col-sm-8 ml-auto mr-auto'>
-                <div className='row px-3'>
-                <h1 className='mr-auto'><b>Issues</b></h1>
+                <div className='row px-3 pr-4'>
+                <h1 className='mr-3'><b>Issues</b></h1>
                 <h1><i className="fa fa-plus my-auto" style={{color:'#5B68F7',cursor:'pointer'}} onClick={showModal} ></i></h1></div>
             </div>
             </div>
-                <div className='row table-responsive'>
+                <div className='row'>
 
-            <div className='col-sm-8 ml-auto mr-auto' ><table className="table">
+            <div className='col-sm-8 mx-auto' ><table className=" table text-center">
   <thead>
     <tr>
       
       <th scope="col" className='text-center'>Title</th>
-      <th scope="col" className='text-center'>Description</th>
-      <th scope="col" className='text-center'>Created By</th>
+      <th scope="col" className='text-center extra-column'>Description</th>
+      <th scope="col" className='text-center extra-column'>Created By</th>
+      <th scope="col" className='text-center extra-column'>Date</th>
       <th scope="col" className='text-center'>Fixed</th>
       
     </tr>
@@ -132,11 +133,13 @@ export default class Landing extends Component{
   <tbody>
       {
           this.state.issues.map((issue)=>{
+              let date=new Date(issue.createdAt);
             return <tr key={issue._id}>
       <td className='text-center'>{issue.title}</td>
-      <td className='text-center'>{issue.description}</td>
-      <td className='text-center'>{issue.reportedBy.name}</td>
-      <td className='text-center'><h3><i className={issue.isFixed?'fa fa-check':'fa fa-times'} style={{color:issue.isFixed?'green':'red',cursor:issue.isFixed?'default':'pointer'}} onClick={()=>this.handleIssueFix(issue._id)}></i></h3></td>
+      <td className='text-center extra-column'>{issue.description}</td>
+      <td className='text-center extra-column'>{issue.reportedBy.name}</td>
+      <td className='text-center extra-column'>{date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()}</td>
+      <td className='text-center'><h3><i className={issue.isFixed?'fa fa-check':'fa fa-times'} style={{color:issue.isFixed?'green':'red',cursor:issue.isFixed?'default':'pointer'}} onClick={()=>issue.isFixed?{}:this.handleIssueFix(issue._id)}></i></h3></td>
       </tr>;
           })
           }

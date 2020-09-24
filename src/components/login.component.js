@@ -14,6 +14,7 @@ export default class LoginPage extends Component{
             registerName:'',
             registerEmail:'',
             isLoading:false,
+            newUserRole:'0',
             registerPassword:''
         };
         this.onLoginSubmit = this.onLoginSubmit.bind(this);
@@ -23,6 +24,7 @@ export default class LoginPage extends Component{
         this.onRegisterEmailChanged=this.onRegisterEmailChanged.bind(this);
         this.onRegisterNameChanged=this.onRegisterNameChanged.bind(this);
         this.onRegisterPasswordChanged=this.onRegisterPasswordChanged.bind(this);
+        this.onRoleSelect=this.onRoleSelect.bind(this);
     }
     onLoginSubmit(e){
         // const options = {
@@ -33,32 +35,28 @@ export default class LoginPage extends Component{
             isLoading:true
         });
         axios.post('/authenticate/login',{email:this.state.loginEmail,password:this.state.loginPassword}).then((res)=>{
-            // this.setState({
-            //     isModalOpen:false
-            // });
+            localStorage.setItem('role',res.data.role)
             localStorage.setItem('token',res.data.token);
-            // localStorage.getItem('token')?console.log('true'):console.log('false');
             window.location='/';
         }).catch((e)=>{
-            // this.setState({
-            //     isModalOpen:false
-            // });
             console.log(e.toString);
-        })
+        });
     }
     onRegistrationSubmit(e){
         e.preventDefault();
-        axios.post('/authenticate/register',{email:this.state.registerEmail,password:this.state.registerPassword,name:this.state.registerName}).then((res)=>{
+        axios.post('/authenticate/register',{email:this.state.registerEmail,password:this.state.registerPassword,name:this.state.registerName,userRole:this.state.newUserRole}).then((res)=>{
             this.setState({
                 isModalOpen:false
             });
-            console.log('User registered');
+            localStorage.setItem('token',res.data.token);
+            localStorage.setItem('role',res.data.role)
+            window.location='/';
         }).catch((e)=>{
             this.setState({
                 isModalOpen:false
             });
             console.log(e.toString);
-        })
+        });
     }
     onRegisterEmailChanged(e){
         this.setState({
@@ -85,6 +83,12 @@ export default class LoginPage extends Component{
             loginPassword:e.target.value
         });
     }
+    onRoleSelect(e){
+        this.setState({
+            newUserRole:e.target.value
+        });
+        console.log(e.target.value);
+    }
     render(){
         return (
             <div className='container-fluid login-container' >
@@ -104,7 +108,12 @@ export default class LoginPage extends Component{
             <input type='text' className='form-control' placeholder='Name' style={{borderBottomLeftRadius:'0px',borderRadius:'0px',marginBottom:'-1px'}} onChange={this.onRegisterNameChanged}/>
             <input type='email' className='form-control' placeholder='Email Address' style={{borderRadius:'0px'}} onChange={this.onRegisterEmailChanged}/>
             <input type='password' className='form-control' placeholder='Password'  onChange={this.onRegisterPasswordChanged}/>
-            
+            {/* <label for="role" style={{marginBottom:'-1px',marginTop:'1px'}}>Select Role:</label> */}
+      <select className="form-control role-selector" id="role" name="sellist1" onChange={this.onRoleSelect} placeholder='Select Role' required>
+        <option value='0'>Administrator</option>
+        <option value='1'>Developer</option>
+        <option value='2'>Tester</option>
+      </select>
         </Modal.Body>
         <Modal.Footer>
         <button type='submit' className='btn btn-primary btn-block  mx-0' style={{backgroundColor:'#5B68F7', border:'1px solid #5B68F7'}}>CREATE ACCOUNT</button>
@@ -129,11 +138,11 @@ export default class LoginPage extends Component{
                             </form>
                             
                                 
-                                <button type='button' className='btn btn-outline-primary btn-block reg-button mt-3' onClick={()=>{
+                                {/* <button type='button' className='btn btn-outline-primary btn-block reg-button mt-3' onClick={()=>{
                                     this.setState({
                                         isModalOpen:true
                                     });
-                                }}>CREATE ACCOUNT</button>
+                                }}>CREATE ACCOUNT</button> */}
                             </div>
                     </div>
                 </div>

@@ -7,8 +7,43 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+@media screen and (max-width:600px){
+  #nav-items{
+    display: none;
+  }
+  .submit-btn{
+    border-radius:0px !important;
+    display: block !important;
+  }
+  input{
+    margin:0px;
+  }
+}
+@media screen and (min-width:600px){
+  #menuIcon{
+    display: none;
+  }
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+textarea:hover, 
+input:hover, 
+textarea:active, 
+input:active, 
+textarea:focus, 
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active,
+select:active,
+select:focus
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
 }

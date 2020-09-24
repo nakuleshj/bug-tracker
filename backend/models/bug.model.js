@@ -18,6 +18,10 @@ const bugSchema=new Schema({
         required:true,
         trim:true,
         ref:'users'
+    },
+    project:{
+        type:String,
+        ref:'projects'
     }
 },{
     writeConcern: {

@@ -28,7 +28,6 @@ bugRouter.route('/:id').get((req,res)=>{
     });
 });
 bugRouter.route('/').get((req,res)=>{
-    console.log('lol');
     const reportedBy=jwt.verify(req.header('authorization').split(' ')[1],process.env.ACCESS_SECRET_KEY).userID;
     Bug.find({reportedBy:reportedBy}).populate('reportedBy')
     .then(bugs=>{
@@ -36,7 +35,6 @@ bugRouter.route('/').get((req,res)=>{
     .catch(err=>res.status(400).json('Error: '+err));
 });
 bugRouter.route('/fix').post((req,res)=>{
-    // jwt.verify(req.header('authorization').split(' ')[1];
     Bug.findByIdAndUpdate(req.body.bugID,{
         isFixed:true
     }).then((bug)=>{

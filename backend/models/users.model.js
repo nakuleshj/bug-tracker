@@ -17,6 +17,10 @@ const userSchema=new Schema({
         type:String,
         required:true,
         trim:true
+    },
+    userRole:{
+        type:String,
+        required:true
     }
 },{
     writeConcern: {
