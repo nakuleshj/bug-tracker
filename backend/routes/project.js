@@ -7,7 +7,6 @@ projectRouter.route('/create').post((req,res)=>{
     const createdBy=jwt.verify(req.header('authorization').split(' ')[1],process.env.ACCESS_SECRET_KEY).userID;
     const newTeam=new Project({
         projectName:projectName,
-        createdBy:createdBy,
         manager:req.body.manager
     });
     newTeam.save().then((project)=>{

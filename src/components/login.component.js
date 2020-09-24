@@ -26,6 +26,9 @@ export default class LoginPage extends Component{
         this.onRegisterPasswordChanged=this.onRegisterPasswordChanged.bind(this);
         this.onRoleSelect=this.onRoleSelect.bind(this);
     }
+    componentDidMount(){
+        document.title='Login | BugTracker'
+    }
     onLoginSubmit(e){
         // const options = {
         //     headers: {'authorization': 'Bearer csdscdscscdsc'}
@@ -129,10 +132,10 @@ export default class LoginPage extends Component{
                             <input type='email' className='form-control' placeholder='Email Address' id='emailInput' onChange={this.onLoginEmailChanged} required/>
                             <input type='password' className='form-control' placeholder='Password' id='pwdInput' onChange={this.onLoginPasswordChanged} required/>
                             <button type='submit' className='btn btn-primary btn-block  mx-0 auth-submit-buttom' style={{backgroundColor:'#5B68F7', border:'1px solid #5B68F7'}}>
-                            {this.state.isLoading?<div class="spinner mx-auto">
-                                <div class="bounce1"></div>
-                                <div class="bounce2"></div>
-                                <div class="bounce3"></div>
+                            {this.state.isLoading?<div className="spinner mx-auto">
+                                <div className="bounce1"></div>
+                                <div className="bounce2"></div>
+                                <div className="bounce3"></div>
                               </div>:
                                 'LOGIN'}</button>
                             </form>

@@ -17,6 +17,7 @@ export default class Landing extends Component{
         }
     }
     componentDidMount(){
+        document.title='Issues | BugTracker'
         axios.get('/bug',{
             headers: {
                 'authorization': `Basic ${localStorage.getItem('token')}` 
@@ -25,7 +26,6 @@ export default class Landing extends Component{
             response => {
                 if (response.data.length > 0) {
                   this.setState({
-                    // users: response.data.map(user => user.username),
                     isOpen:false,
                     issues: response.data
                   });}}

@@ -10,10 +10,6 @@ const projectSchema=new Schema(
         members:{
             type:Array
         },
-        createdBy:{
-            type:String,
-            required:true
-        },
         manager:{
             type:String,
             required:true,

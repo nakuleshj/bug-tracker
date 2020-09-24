@@ -11,17 +11,16 @@ body {
   #nav-items{
     display: none;
   }
-  .submit-btn{
-    border-radius:0px !important;
-    display: block !important;
-  }
-  input{
-    margin:0px;
+  .navbar-heading{
+    font-size:28px;
   }
 }
 @media screen and (min-width:600px){
   #menuIcon{
     display: none;
+  }
+  .navbar-heading{
+    font-size:40px;
   }
 }
 code {

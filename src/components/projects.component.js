@@ -12,7 +12,8 @@ export default class Project extends Component {
       projectName: '',
       users:[],
       projectManager:'',
-      deadline:''
+      deadline:'',
+      editProject:false
     };
     this.submitNewProject = this.submitNewProject.bind(this);
     this.onChangedProjectName = this.onChangedProjectName.bind(this);
@@ -45,6 +46,7 @@ export default class Project extends Component {
     });
   }
   componentDidMount() {
+    document.title='Projects | BugTracker'
     Axios.get('/project')
       .then((res) => {
         this.setState({ projects: res.data });
@@ -67,25 +69,49 @@ export default class Project extends Component {
     return (<div className='container-fluid'>
       <Navbar />
       
-      <form className="form-inline mb-3 text-center  justify-content-center" onSubmit={this.submitNewProject}>
+      <form className="form-inline mb-3  justify-content-lg-center justify-content-start" onSubmit={this.submitNewProject}>
+        
           <input type='text' className='form-control' placeholder='Project Name' id="pn" onChange={this.onChangedProjectName} style={{ borderRadius: '0px', borderTopRightRadius: '0px' }} required />
-          <div class="form-group"><select className='form-control' placeholder='Select Manager' onChange={this.onChangedProjectManager} style={{ borderRadius: '0px'}} required>
+          <select className='form-control mt-sm-0 mt-1' placeholder='Select Manager' onChange={this.onChangedProjectManager} style={{ borderRadius: '0px'}} required>
           <option value="" disabled selected hidden>Select Project Manager</option>
             {
               this.state.users.map((user)=>{
                 return user.name!==' '?<option value={user._id}>{user.name}</option>:null;
               })
               }
-          </select></div>
-          <button type='submit' className='btn btn-primary  submit-btn mx-0' style={{ backgroundColor: '#5B68F7', border: '1px solid #5B68F7', borderBottomLeftRadius: '0px', borderRadius: '0px' }}>Create Project</button>
-             
+          </select>
+          <button type='submit' className='btn btn-primary mx-0 mt-sm-0 mt-1' style={{ backgroundColor: '#5B68F7', border: '1px solid #5B68F7', borderBottomLeftRadius: '0px', borderRadius: '0px' }}>Create Project</button>
+          {/* <button type='submit' className='btn btn-primary  btn-block submit-btn mx-0' style={{ backgroundColor: '#5B68F7', border: '1px solid #5B68F7', borderBottomLeftRadius: '0px', borderRadius: '0px' }}>Create Project</button> */}
         </form>
-       
-      <ul class="list-group">
-        {this.state.projects.map((project) => {
-          return <li className="list-group-item text-center mx-4">{project.projectName}</li>
-        })}
-      </ul>
+        <div className='row'>
+          <div className='col-md-8 mx-auto'>
+       <div className='table-responsive'>
+         <table className='table'>
+           <thead>
+             <tr>
+               <th className='text-center'>Project Title</th>
+                 <th className='text-center'>Project Manager</th>
+                 <th></th>
+             </tr>
+           </thead>
+           <tbody>
+             {this.state.projects.map((project)=>{
+             return <tr>
+               <td className='text-center'>{false?<input value={project.projectName} className="form-control"/>:project.projectName}</td>
+             <td className='text-center'>{this.state.editProject?<select className='form-control mt-sm-0 mt-1' placeholder='Select Manager' onChange={this.onChangedProjectManager} style={{ borderRadius: '0px'}} required>
+          <option value="" disabled selected hidden>Select Project Manager</option>
+            {
+              this.state.users.map((user)=>{
+                return user.name!==' '?<option value={user._id}>{user.name}</option>:null;
+              })
+              }
+          </select>:project.manager.name}</td><td>lol</td>
+             </tr>})}
+           </tbody>
+         </table>
+       </div>
+              </div>
+              </div>
       </div>
     );
   };
