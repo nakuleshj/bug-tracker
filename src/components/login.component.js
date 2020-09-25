@@ -38,6 +38,7 @@ export default class LoginPage extends Component{
             isLoading:true
         });
         axios.post('/authenticate/login',{email:this.state.loginEmail,password:this.state.loginPassword}).then((res)=>{
+            console.log(res.data.message);
             localStorage.setItem('role',res.data.role)
             localStorage.setItem('token',res.data.token);
             window.location='/';

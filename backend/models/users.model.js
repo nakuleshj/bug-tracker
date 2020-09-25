@@ -21,7 +21,7 @@ const userSchema=new Schema({
     userRole:{
         type:String,
         required:true
-    }
+    },
 },{
     writeConcern: {
         j: true,

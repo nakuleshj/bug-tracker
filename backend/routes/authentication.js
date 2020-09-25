@@ -5,6 +5,9 @@ let User=require('../models/users.model');
 authenticationRouter.route('/login').post(async (req,res)=>{
     try{
         let f=false;
+        User.find({email:req.body.email}).then(user=>{
+            if(user.length===0)
+            console.log('empty')})
         const allUsers=await User.find();
         allUsers.forEach(async(user)=>{
             if(user.email===req.body.email)
@@ -28,9 +31,18 @@ authenticationRouter.route('/login').post(async (req,res)=>{
 authenticationRouter.route('/').get((req,res)=>{
     User.find().then(users=>res.json(users)).catch(e=>res.status(500))
 });
-authenticationRouter.route('/:id').delete((req,res)=>{
-    User.findByIdAndDelete(req.params.id).then(()=>res.status(200).json('User Deleted'))
-    .catch((e)=>res.status(500).json({'error':e.toString()}));
+authenticationRouter.route('/disable/:id').post((req,res)=>{
+    User.findByIdAndUpdate(req.params.id,{isDisabled:true}).then((user)=>{
+        res.status(200).json({message:'User Disabled'})
+    }).catch((e)=>{
+        res.status(500).json({message:e.toString()})
+    })
+});
+authenticationRouter.route('/resetPassword/:id').post(async (req,res)=>{
+    const hashedPassword=await bCrypt.hash(req.body.newPassword,10);
+    User.findByIdAndUpdate(req.params.id,{password:hashedPassword,})
+    .then((user)=>res.status(200).json({'message':'Password Updated'}))
+    .catch((e)=>res.status(500).json({message:e.toString()}));
 });
 authenticationRouter.route('/register').post(async (req,res)=>{
     try{
