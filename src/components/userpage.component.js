@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from './navbar.component';
 import Axios from 'axios';
+import Modal from 'react-bootstrap/Modal'
 export default class UserPage extends Component {
     constructor(props) {
         super(props);
@@ -10,6 +11,9 @@ export default class UserPage extends Component {
             registerPassword: '',
             registerEmail: '',
             userRole: '0',
+            resetPassword:false,
+            newPassword:'',
+            newPasswordUserID:'',
             users: []
         };
         this.onRegistrationSubmit = this.onRegistrationSubmit.bind(this);
@@ -17,6 +21,8 @@ export default class UserPage extends Component {
         this.onRegisterNameChanged = this.onRegisterNameChanged.bind(this);
         this.onRegisterPasswordChanged = this.onRegisterPasswordChanged.bind(this);
         this.onRoleSelect = this.onRoleSelect.bind(this);
+        this.onNewPasswordChanged=this.onNewPasswordChanged.bind(this);
+        this.resetPassword=this.resetPassword.bind(this);
     }
     componentDidMount() {
         document.title = 'Users | BugTracker'
@@ -61,9 +67,32 @@ export default class UserPage extends Component {
             registerPassword: e.target.value
         });
     }
+    onNewPasswordChanged(e){
+        this.setState({
+            newPassword: e.target.value
+        });
+    }
+    resetPassword(){
+        Axios.post('/authenticate/resetPassword/'+this.state.newPasswordUserID,{
+            newPassword:this.state.newPassword
+        }).then((res)=>{
+            window.location.reload();})
+    }
     render() {
         return (
             <div className="container-fluid">
+                <Modal show={this.state.resetPassword} onHide={()=>this.setState({resetPassword:false})}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Reset Password</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <input id='newPassword' className='form-control' placeholder='Enter New Password' onChange={this.onNewPasswordChanged}/>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button type='button' className='btn btn-primary btn-block' style={{backgroundColor:'#5B68F7', border: '1px solid #5B68F7', borderRadius: '0px',}} onClick={this.resetPassword}>Reset Password</button>
+                    </Modal.Footer>
+                    </Modal>
                 <Navbar />
                 <div className='row mx-auto'>
                     <div className='col-md-10 mx-auto'>
@@ -80,7 +109,7 @@ export default class UserPage extends Component {
                                 <option value='1'>Developer</option>
                                 <option value='2'>Tester</option>
                             </select>
-                            <button type='submit' className='btn btn-primary submit-btn mx-0 mt-sm-0 mt-1' style={{ backgroundColor: '#5B68F7', border: '1px solid #5B68F7', borderRadius: '0px', borderTopLeftRadius: '0px' }}>Add User</button>
+                            <button type='submit' className='btn btn-primary submit-btn mx-0 mt-sm-0 mt-1' style={{ backgroundColor: '#5B68F7', border: '1px solid #5B68F7', borderRadius: '0px' }}>Add User</button>
                         </form>
 
                         <div className='table-responsive'>
@@ -100,7 +129,7 @@ export default class UserPage extends Component {
                                             return <tr key={user._id}><td className='text-center'>{user.name}</td>
                                                 <td className='text-center'>{user.email}</td><td className='text-center'>{user.userRole === '0' ? 'Administrator' : (user.userRole === '1' ? 'Developer' : 'Tester')}</td>
     
-                                                <td className='text-center'><button className='btn btn-link py-0'>Reset Password</button></td>
+                                                <td className='text-center'><button className='btn btn-link py-0' onClick={()=>this.setState({resetPassword:true,newPasswordUserID:user._id})}>Reset Password</button></td>
                                             </tr>;
                                         })}
                                 </tbody>
